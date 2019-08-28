@@ -1,0 +1,13 @@
+﻿--select * from jobs order by RunAt asc
+
+select count(*), action
+from workerlogs 
+--where action = 'QUERYLIST'
+group by action
+
+select
+	count(*) as total,
+	avg(datediff(millisecond, RunAt, ExecuteAt)) as avg_delay,
+	stdev(datediff(millisecond, RunAt, ExecuteAt)) as std_delay
+from jobs
+where State = 2 and RunAt < ExecuteAt
