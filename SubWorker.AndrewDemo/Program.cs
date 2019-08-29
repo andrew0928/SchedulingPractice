@@ -30,7 +30,7 @@ namespace SubWorker.AndrewDemo
                     }
 
                     retry++;
-                    Task.Delay(1000).Wait();
+                    Task.Delay(5000).Wait();
                     Console.Write("_");
                 }
             }
