@@ -46,7 +46,11 @@ namespace SubWorker.AndrewDemo
                         if (repo.AcquireJobLock(job.Id))
                         {
                             repo.ProcessLockedJob(job.Id);
-                            Console.Write(".");
+                            Console.Write("O");
+                        }
+                        else
+                        {
+                            Console.Write("X");
                         }
                         empty = false;
                     }

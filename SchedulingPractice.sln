@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.102
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulingPractice.Core", "SchedulingPractice.Core\SchedulingPractice.Core.csproj", "{4E411DD0-16E8-4BD9-BA79-D22D1F4FE9B1}"
 EndProject
@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubWorker.AndrewDemo", "Sub
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{927CF37F-7C8C-426E-B63C-1121CA9FE062}"
 	ProjectSection(SolutionItems) = preProject
+		database.txt = database.txt
 		README.md = README.md
+		statistics.txt = statistics.txt
 	EndProjectSection
 EndProject
 Global

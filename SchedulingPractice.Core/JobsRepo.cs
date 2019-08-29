@@ -92,7 +92,7 @@ select @id;
             return this._conn.Execute(
                 @"
 update [jobs] set state = 1 where id = @id and state = 0;
-insert [workerlogs] (jobid, action, clientid) values (@id, case @@rowcount when 1 then 'ACQUIRE_SUCCESS' else 'ACQUIRE_FAIL' end, @clientid);
+insert [workerlogs] (jobid, action, clientid) values (@id, case @@rowcount when 1 then 'ACQUIRE_SUCCESS' else 'ACQUIRE_FAILURE' end, @clientid);
 ",
                 new
                 {
@@ -138,6 +138,11 @@ insert [workerlogs] (jobid, action, clientid) values (@id, case @@rowcount when 
             return this._conn.ExecuteScalar<int>(@"select count(*) from jobs where state = @state;", new { state });
         }
 
+        private int JobExecuteDelayExceedCount(TimeSpan timeout)
+        {
+            return this._conn.ExecuteScalar<int>(@"select count(*) from jobs where state = 2 and datediff(millisecond, RunAt, ExecuteAt) > @maxdelay;", new { maxdelay = timeout.TotalMilliseconds });
+        }
+
         private double JobExecuteDelayAverage()
         {
             return this._conn.ExecuteScalar<double>(@"select avg(datediff(millisecond, RunAt, ExecuteAt)) as average_delay from jobs where state = 2;");
@@ -160,6 +165,7 @@ insert [workerlogs] (jobid, action, clientid) values (@id, case @@rowcount when 
             int count_state_lock,
             int count_state_complete,
 
+            int stat_delay_exceed_count,
             double stat_average_delay,
             double stat_stdev_delay
             ) GetStatstics()
@@ -176,6 +182,7 @@ insert [workerlogs] (jobid, action, clientid) values (@id, case @@rowcount when 
                 this.CountJobState(JobStateEnum.LOCK),
                 this.CountJobState(JobStateEnum.COMPLETE),
 
+                this.JobExecuteDelayExceedCount(TimeSpan.FromSeconds(10)),
                 this.JobExecuteDelayAverage(),
                 this.JobExecuteDelayStdev());
         }

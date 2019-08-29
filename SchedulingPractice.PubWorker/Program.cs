@@ -134,6 +134,7 @@ namespace SchedulingPractice.PubWorker
 
 
                 // step 5, wait 30 sec, show statistic
+                Task.Delay(30 * 1000).Wait();
                 var metrics = repo.GetStatstics();
 
                 Console.WriteLine();
@@ -160,9 +161,15 @@ namespace SchedulingPractice.PubWorker
                 Console.WriteLine($"- DELAY(Stdev):       {metrics.stat_stdev_delay}");
 
                 Console.WriteLine();
+                Console.WriteLine("--(test result)----------------------------------------------");
+                Console.WriteLine($"- Complete Job:       {metrics.count_action_complete == metrics.count_action_create}, {metrics.count_action_complete} / {metrics.count_action_create}");
+                Console.WriteLine($"- Delay Too Long:     {metrics.stat_delay_exceed_count}");
+                Console.WriteLine($"- Fail Job:           {metrics.count_state_lock == 0}, {metrics.count_state_lock}");
+
+                Console.WriteLine();
                 Console.WriteLine("--(benchmark score)----------------------------------------------");
-                Console.WriteLine($"Exec Cost Score:      {metrics.count_action_querylist * 100.0 + metrics.count_action_acquire_failure * 10.0 + metrics.count_action_queryjob * 1.0:#.##} (querylist x 100 + acquire-failure x 10 + queryjob x 1)");
-                Console.WriteLine($"Efficient Score:      {metrics.stat_average_delay + metrics.stat_stdev_delay:#.##} (average + stdev)");
+                Console.WriteLine($"- Exec Cost Score:      {metrics.count_action_querylist * 100.0 + metrics.count_action_acquire_failure * 10.0 + metrics.count_action_queryjob * 1.0:#.##} (querylist x 100 + acquire-failure x 10 + queryjob x 1)");
+                Console.WriteLine($"- Efficient Score:      {metrics.stat_average_delay + metrics.stat_stdev_delay:#.##} (average + stdev)");
             }
         }
     }
