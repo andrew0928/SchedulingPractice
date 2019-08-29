@@ -131,6 +131,38 @@ namespace SchedulingPractice.PubWorker
                 Console.WriteLine($"- now:   {DateTime.Now}");
                 Console.WriteLine($"- since: {since}");
                 Console.WriteLine($"- until: {until}");
+
+
+                // step 5, wait 30 sec, show statistic
+                var metrics = repo.GetStatstics();
+
+                Console.WriteLine();
+                Console.WriteLine($"Jobs Scheduling Metrics:");
+
+                Console.WriteLine();
+                Console.WriteLine("--(action count)----------------------------------------------");
+                Console.WriteLine($"- CREATE:             {metrics.count_action_create}");
+                Console.WriteLine($"- ACQUIRE_SUCCESS:    {metrics.count_action_acquire_success}");
+                Console.WriteLine($"- ACQUIRE_FAILURE:    {metrics.count_action_acquire_failure}");
+                Console.WriteLine($"- COMPLETE:           {metrics.count_action_complete}");
+                Console.WriteLine($"- QUERYJOB:           {metrics.count_action_queryjob}");
+                Console.WriteLine($"- QUERYLIST:          {metrics.count_action_querylist}");
+
+                Console.WriteLine();
+                Console.WriteLine("--(state count)----------------------------------------------");
+                Console.WriteLine($"- COUNT(CREATE):      {metrics.count_state_create}");
+                Console.WriteLine($"- COUNT(LOCK):        {metrics.count_state_lock}");
+                Console.WriteLine($"- COUNT(COMPLETE):    {metrics.count_action_complete}");
+
+                Console.WriteLine();
+                Console.WriteLine("--(statistics)----------------------------------------------");
+                Console.WriteLine($"- DELAY(Average):     {metrics.stat_average_delay}");
+                Console.WriteLine($"- DELAY(Stdev):       {metrics.stat_stdev_delay}");
+
+                Console.WriteLine();
+                Console.WriteLine("--(benchmark score)----------------------------------------------");
+                Console.WriteLine($"Exec Cost Score:      {metrics.count_action_querylist * 100.0 + metrics.count_action_acquire_failure * 10.0 + metrics.count_action_queryjob * 1.0:#.##} (querylist x 100 + acquire-failure x 10 + queryjob x 1)");
+                Console.WriteLine($"Efficient Score:      {metrics.stat_average_delay + metrics.stat_stdev_delay:#.##} (average + stdev)");
             }
         }
     }

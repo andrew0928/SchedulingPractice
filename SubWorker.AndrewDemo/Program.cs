@@ -2,6 +2,10 @@
 using System.Linq;
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
+using System.Threading;
+using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 
 namespace SubWorker.AndrewDemo
 {
@@ -9,31 +13,56 @@ namespace SubWorker.AndrewDemo
     {
         static void Main(string[] args)
         {
-            Task.Delay(3000).Wait();
-
-            using(JobsRepo repo= new JobsRepo())
-            {
-                JobInfo job = null;
-                int max_retry_count = 30;
-                int retry = 0;
-
-                while (retry < max_retry_count)
+            var host = new HostBuilder()
+                .ConfigureServices((context, services) =>
                 {
-                    while ((job = repo.GetReadyJobs(TimeSpan.Zero).FirstOrDefault()) != null)
+                    services.AddHostedService<AndrewSubWorkerBackgroundService>();
+                })
+                .Build();
+
+            using (host)
+            {
+                host.Start();
+                host.WaitForShutdown();
+            }
+        }
+    }
+
+    public class AndrewSubWorkerBackgroundService : BackgroundService
+    {
+        protected async override Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            await Task.Delay(1);
+
+            using (JobsRepo repo = new JobsRepo())
+            {
+                while(stoppingToken.IsCancellationRequested == false)
+                {
+                    bool empty = true;
+                    foreach(var job in repo.GetReadyJobs())
                     {
-                        retry = 0;
+                        if (stoppingToken.IsCancellationRequested == true) goto shutdown;
+
                         if (repo.AcquireJobLock(job.Id))
                         {
                             repo.ProcessLockedJob(job.Id);
                             Console.Write(".");
                         }
+                        empty = false;
                     }
+                    if (empty == false) continue;
 
-                    retry++;
-                    Task.Delay(5000).Wait();
-                    Console.Write("_");
+                    try
+                    {
+                        await Task.Delay(10000, stoppingToken);
+                        Console.Write("_");
+                    }
+                    catch (TaskCanceledException) { break; }
                 }
             }
+
+            shutdown:
+            Console.WriteLine($"- shutdown event detected, stop worker service...");
         }
     }
 }

@@ -34,6 +34,10 @@ namespace SchedulingPractice.Core
                 this._conn = new SqlConnection(connstr);
             }
         }
+        public IEnumerable<JobInfo> GetReadyJobs()
+        {
+            return this.GetReadyJobs(TimeSpan.Zero);
+        }
 
         public IEnumerable<JobInfo> GetReadyJobs(TimeSpan duration)
         {
@@ -115,10 +119,71 @@ insert [workerlogs] (jobid, action, clientid) values (@id, case @@rowcount when 
                 }) == 2;
         }
 
+
         public void ResetDatabase()
         {
             this._conn.Execute(@"truncate table [jobs]; truncate table [workerlogs];");
         }
+
+        #region statistic helper
+
+
+        private int CountActions(string action)
+        {
+            return this._conn.ExecuteScalar<int>(@"select count(*) from workerlogs where action = @action;", new { action });
+        }
+
+        private int CountJobState(JobStateEnum state)
+        {
+            return this._conn.ExecuteScalar<int>(@"select count(*) from jobs where state = @state;", new { state });
+        }
+
+        private double JobExecuteDelayAverage()
+        {
+            return this._conn.ExecuteScalar<double>(@"select avg(datediff(millisecond, RunAt, ExecuteAt)) as average_delay from jobs where state = 2;");
+        }
+
+        private double JobExecuteDelayStdev()
+        {
+            return this._conn.ExecuteScalar<double>(@"select stdev(datediff(millisecond, RunAt, ExecuteAt)) as stdev_delay from jobs where state = 2;");
+        }
+
+        public (
+            int count_action_create,
+            int count_action_acquire_success,
+            int count_action_acquire_failure,
+            int count_action_complete,
+            int count_action_queryjob,
+            int count_action_querylist,
+
+            int count_state_create,
+            int count_state_lock,
+            int count_state_complete,
+
+            double stat_average_delay,
+            double stat_stdev_delay
+            ) GetStatstics()
+        {
+            return (
+                this.CountActions("CREATE"),
+                this.CountActions("ACQUIRE_SUCCESS"),
+                this.CountActions("ACQUIRE_FAILURE"),
+                this.CountActions("COMPLETE"),
+                this.CountActions("QUERYJOB"),
+                this.CountActions("QUERYLIST"),
+
+                this.CountJobState(JobStateEnum.CREATE),
+                this.CountJobState(JobStateEnum.LOCK),
+                this.CountJobState(JobStateEnum.COMPLETE),
+
+                this.JobExecuteDelayAverage(),
+                this.JobExecuteDelayStdev());
+        }
+
+        #endregion
+
+
+
 
         public void Dispose()
         {
