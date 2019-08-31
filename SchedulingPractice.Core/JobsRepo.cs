@@ -69,6 +69,8 @@ insert [workerlogs] (jobid, action, clientid, results) values (@jobid, 'QUERYJOB
 
         public int CreateJob(DateTime runat)
         {
+            if ((DateTime.Now + JobSettings.MinPrepareTime) > runat) throw new InvalidOperationException();
+
             return _conn.ExecuteScalar<int>(
     @"
 --
@@ -138,9 +140,9 @@ insert [workerlogs] (jobid, action, clientid) values (@id, case @@rowcount when 
             return this._conn.ExecuteScalar<int>(@"select count(*) from jobs where state = @state;", new { state });
         }
 
-        private int JobExecuteDelayExceedCount(TimeSpan timeout)
+        private int JobExecuteDelayExceedCount()
         {
-            return this._conn.ExecuteScalar<int>(@"select count(*) from jobs where state = 2 and datediff(millisecond, RunAt, ExecuteAt) > @maxdelay;", new { maxdelay = timeout.TotalMilliseconds });
+            return this._conn.ExecuteScalar<int>(@"select count(*) from jobs where state = 2 and datediff(millisecond, RunAt, ExecuteAt) > @maxdelay;", new { maxdelay = JobSettings.MaxDelayTime.TotalMilliseconds });
         }
 
         private double JobExecuteDelayAverage()
@@ -182,7 +184,7 @@ insert [workerlogs] (jobid, action, clientid) values (@id, case @@rowcount when 
                 this.CountJobState(JobStateEnum.LOCK),
                 this.CountJobState(JobStateEnum.COMPLETE),
 
-                this.JobExecuteDelayExceedCount(TimeSpan.FromSeconds(10)),
+                this.JobExecuteDelayExceedCount(),
                 this.JobExecuteDelayAverage(),
                 this.JobExecuteDelayStdev());
         }

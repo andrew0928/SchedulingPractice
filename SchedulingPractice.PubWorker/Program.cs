@@ -8,9 +8,18 @@ namespace SchedulingPractice.PubWorker
     {
         static void Main(string[] args)
         {
+            // 設定: 預定測試持續時間
             TimeSpan duration = TimeSpan.FromMinutes(10);
-            DateTime since = DateTime.Now.AddSeconds(10);
+
+            // 設定: 預定測試開始時間
+            DateTime since = DateTime.Now.AddSeconds(30);
+
+
+
+            // 計算: 預定測試預計結束時間
             DateTime until = since + duration;
+
+            // 統計: 累計總任務數
             int total = 0;
             
             
@@ -109,14 +118,14 @@ namespace SchedulingPractice.PubWorker
 
                     int count = 0;
                     Random rnd = new Random();
-                    //DateTime current = since;
+                    
 
                     while (DateTime.Now.AddSeconds(10) < until)
                     {
                         Task.Delay(1000 + rnd.Next(2000)).Wait();
                         count++;
                         Console.Write(".");
-                        repo.CreateJob(DateTime.Now.AddSeconds(10));
+                        repo.CreateJob(DateTime.Now + JobSettings.MinPrepareTime + TimeSpan.FromMilliseconds(100));
                     }
 
                     total += count;
@@ -134,7 +143,7 @@ namespace SchedulingPractice.PubWorker
 
 
                 // step 5, wait 30 sec, show statistic
-                Task.Delay(30 * 1000).Wait();
+                Task.Delay(JobSettings.MaxDelayTime + JobSettings.MinPrepareTime).Wait();
                 var metrics = repo.GetStatstics();
 
                 Console.WriteLine();

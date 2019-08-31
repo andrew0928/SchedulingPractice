@@ -58,7 +58,7 @@ namespace SubWorker.AndrewDemo
 
                     try
                     {
-                        await Task.Delay(10000, stoppingToken);
+                        await Task.Delay(JobSettings.MinPrepareTime, stoppingToken);
                         Console.Write("_");
                     }
                     catch (TaskCanceledException) { break; }
