@@ -4,6 +4,9 @@ namespace SchedulingPractice.Core
 {
     public class JobInfo
     {
+        public readonly static JobInfo Empty = new JobInfo();
+
+
         public int Id { get; set; }
         public DateTime CreateAt { get; set; }
         public DateTime RunAt { get; set; }
