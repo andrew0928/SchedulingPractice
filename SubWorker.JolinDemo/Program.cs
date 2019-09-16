@@ -35,15 +35,11 @@ namespace SubWorker.JolinDemo
 
     public class JolinSubWorkerBackgroundService : BackgroundService
     {
-        private int _intervalSecond = 10;
-
         private Scheduler _scheduler;
 
-        private string _connectString;
         public JolinSubWorkerBackgroundService(string connectString)
         {
-            _scheduler = new Scheduler(connectString);
-            _connectString = connectString;
+            _scheduler = new Scheduler(connectString, 2);
         }
 
         protected async override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -52,21 +48,13 @@ namespace SubWorker.JolinDemo
 
             while (stoppingToken.IsCancellationRequested == false)
             {
-                using (JobsRepo repo = new JobsRepo(_connectString))
+                try
                 {
-                    var jobs = repo.GetReadyJobs(TimeSpan.FromSeconds(_intervalSecond));
-
-                    if (jobs.Count() > 0)
-                        this._scheduler.SetSchedule(jobs);
-
-                    try
-                    {
-                        await Task.Delay(_intervalSecond * 1000, stoppingToken);
-                    }
-                    catch (Exception ex)
-                    {
-                        this._scheduler.Stop();
-                    }
+                    await Task.Delay(60 * 1000, stoppingToken);
+                }
+                catch (Exception ex)
+                {
+                    this._scheduler.Stop();
                 }
             }
 
