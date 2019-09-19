@@ -9,7 +9,7 @@ namespace SchedulingPractice.PubWorker
         static void Main(string[] args)
         {
             // 設定: 預定測試持續時間
-            TimeSpan duration = TimeSpan.FromMinutes(10);
+            TimeSpan duration = TimeSpan.FromMinutes(1);
 
             // 設定: 預定測試開始時間
             DateTime since = DateTime.Now.AddSeconds(30);
