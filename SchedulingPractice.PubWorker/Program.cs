@@ -15,7 +15,7 @@ namespace SchedulingPractice.PubWorker
             
             
 
-            using (var repo = new JobsRepo(@"Data Source=localhost\SQLEXPRESS01;Initial Catalog=JobsDB;Integrated Security=True;Pooling=False"))
+            using (var repo = new JobsRepo())
             {
                 Console.WriteLine($"Init test database...");
                 Console.WriteLine($"- now:   {DateTime.Now}");

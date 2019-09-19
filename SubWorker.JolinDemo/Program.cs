@@ -17,7 +17,7 @@ namespace SubWorker.JolinDemo
             var host = new HostBuilder()
                 .ConfigureServices((context, services) =>
                 {
-                    string connectString = @"Data Source=localhost\SQLEXPRESS01;Initial Catalog=JobsDB;Integrated Security=True;Pooling=False";
+                    string connectString = null;// @"Data Source=localhost\SQLEXPRESS01;Initial Catalog=JobsDB;Integrated Security=True;Pooling=False";
                     services.AddSingleton<IHostedService,JolinSubWorkerBackgroundService>(sp=> 
                     {
                         return new JolinSubWorkerBackgroundService(connectString);
