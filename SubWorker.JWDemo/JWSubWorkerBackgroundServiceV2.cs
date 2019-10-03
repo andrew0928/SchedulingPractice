@@ -40,8 +40,9 @@ namespace SubWorker.JWDemo
             await Task.Delay(1);
 
 
-            using (JobsRepo repo = new JobsRepo("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\workspace\\dotnet\\SchedulingPractice\\SubWorker.AndrewDemo\\JobsDB.mdf;Integrated Security=True"))
+            using (JobsRepo repo = new JobsRepo())
             {
+
                 while (stoppingToken.IsCancellationRequested == false)
                 {
                     JobInfo tmpJobInfo = null;
@@ -99,7 +100,7 @@ namespace SubWorker.JWDemo
 
             public JobWorker(int concurrentSize)
             {
-                using (JobsRepo repo = new JobsRepo("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\workspace\\dotnet\\SchedulingPractice\\SubWorker.AndrewDemo\\JobsDB.mdf;Integrated Security=True"))
+                using (JobsRepo repo = new JobsRepo())
                 {
                     while (true)
                     {
