@@ -24,7 +24,7 @@ namespace SchedulingPractice.PubWorker
             
             
 
-            using (var repo = new JobsRepo())
+            using (var repo = new JobsRepo("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\workspace\\dotnet\\SchedulingPractice\\SubWorker.AndrewDemo\\JobsDB.mdf;Integrated Security=True"))
             {
                 Console.WriteLine($"Init test database...");
                 Console.WriteLine($"- now:   {DateTime.Now}");

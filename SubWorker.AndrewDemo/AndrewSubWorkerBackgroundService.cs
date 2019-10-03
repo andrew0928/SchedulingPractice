@@ -14,7 +14,7 @@ namespace SubWorker.AndrewDemo
         {
             await Task.Delay(1);
 
-            using (JobsRepo repo = new JobsRepo())
+            using (JobsRepo repo = new JobsRepo("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=D:\\workspace\\dotnet\\SchedulingPractice\\SubWorker.AndrewDemo\\JobsDB.mdf;Integrated Security=True"))
             {
                 while (stoppingToken.IsCancellationRequested == false)
                 {
