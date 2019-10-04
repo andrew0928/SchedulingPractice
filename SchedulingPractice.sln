@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubWorker.JolinDemo", "SubW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HankDemo.HankTaskRunner", "HankDemo.HankTaskRunner\HankDemo.HankTaskRunner.csproj", "{304D40E1-30C5-4918-8F8E-384ACD439941}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubWorker.JWDemo", "SubWorker.JWDemo\SubWorker.JWDemo.csproj", "{B07BEFC7-824A-4FBE-8033-B967058B0782}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{D7B35147-CE8A-42FB-BC72-0BFEAD7183C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7B35147-CE8A-42FB-BC72-0BFEAD7183C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7B35147-CE8A-42FB-BC72-0BFEAD7183C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B07BEFC7-824A-4FBE-8033-B967058B0782}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B07BEFC7-824A-4FBE-8033-B967058B0782}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B07BEFC7-824A-4FBE-8033-B967058B0782}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B07BEFC7-824A-4FBE-8033-B967058B0782}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CADEA30F-5441-43CF-B82B-7D60B06A1C6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CADEA30F-5441-43CF-B82B-7D60B06A1C6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CADEA30F-5441-43CF-B82B-7D60B06A1C6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
