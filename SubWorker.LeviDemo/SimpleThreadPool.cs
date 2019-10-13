@@ -107,11 +107,11 @@ namespace SubWorker.LeviDemo
                             if (repo.AcquireJobLock(job.Id))
                             {
                                 repo.ProcessLockedJob(job.Id);
-                                Console.WriteLine($"{job.Id} O");
+                                Console.WriteLine($"[Consumer][Done] #{job.Id}");
                             }
                             else
                             {
-                                Console.WriteLine($"{job.Id} X");
+                                Console.WriteLine($"[Consumer][Failed] #{job.Id}");
                             }
                         }
 
