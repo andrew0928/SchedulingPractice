@@ -16,9 +16,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		statistics.txt = statistics.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubWorker.JolinDemo", "SubWorker.JolinDemo\SubWorker.JolinDemo.csproj", "{CADEA30F-5441-43CF-B82B-7D60B06A1C6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubWorker.JolinDemo", "SubWorker.JolinDemo\SubWorker.JolinDemo.csproj", "{CADEA30F-5441-43CF-B82B-7D60B06A1C6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HankDemo.HankTaskRunner", "HankDemo.HankTaskRunner\HankDemo.HankTaskRunner.csproj", "{304D40E1-30C5-4918-8F8E-384ACD439941}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HankDemo.HankTaskRunner", "HankDemo.HankTaskRunner\HankDemo.HankTaskRunner.csproj", "{304D40E1-30C5-4918-8F8E-384ACD439941}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubWorker.BorisDemo", "SubWorker.BorisDemo\SubWorker.BorisDemo.csproj", "{8011B760-669E-45C2-BB64-8D97CC8F287D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,6 +48,10 @@ Global
 		{304D40E1-30C5-4918-8F8E-384ACD439941}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{304D40E1-30C5-4918-8F8E-384ACD439941}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{304D40E1-30C5-4918-8F8E-384ACD439941}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8011B760-669E-45C2-BB64-8D97CC8F287D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8011B760-669E-45C2-BB64-8D97CC8F287D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8011B760-669E-45C2-BB64-8D97CC8F287D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8011B760-669E-45C2-BB64-8D97CC8F287D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
