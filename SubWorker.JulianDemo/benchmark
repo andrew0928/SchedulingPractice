@@ -1,0 +1,342 @@
+
+===5 min===
+===5 channel per instance===
+1 instance
+Jobs Scheduling Metrics:
+
+--(action count)----------------------------------------------
+- CREATE:             885
+- ACQUIRE_SUCCESS:    885
+- ACQUIRE_FAILURE:    0
+- COMPLETE:           885
+- QUERYJOB:           0
+- QUERYLIST:          20
+
+--(state count)----------------------------------------------
+- COUNT(CREATE):      0
+- COUNT(LOCK):        0
+- COUNT(COMPLETE):    885
+
+--(statistics)----------------------------------------------
+- DELAY(Average):     4198
+- DELAY(Stdev):       3500.65813749911
+
+--(test result)----------------------------------------------
+- Complete Job:       True, 885 / 885
+- Delay Too Long:     0
+- Fail Job:           True, 0
+
+--(benchmark score)----------------------------------------------
+- Exec Cost Score:      2000 (querylist x 100 + acquire-failure x 10 + queryjob x 1)
+- Efficient Score:      7698.66 (average + stdev)
+
+2 instances
+Jobs Scheduling Metrics:
+
+--(action count)----------------------------------------------
+- CREATE:             886
+- ACQUIRE_SUCCESS:    886
+- ACQUIRE_FAILURE:    867
+- COMPLETE:           886
+- QUERYJOB:           0
+- QUERYLIST:          40
+
+--(state count)----------------------------------------------
+- COUNT(CREATE):      0
+- COUNT(LOCK):        0
+- COUNT(COMPLETE):    886
+
+--(statistics)----------------------------------------------
+- DELAY(Average):     3089
+- DELAY(Stdev):       3262.37172475426
+
+--(test result)----------------------------------------------
+- Complete Job:       True, 886 / 886
+- Delay Too Long:     0
+- Fail Job:           True, 0
+
+--(benchmark score)----------------------------------------------
+- Exec Cost Score:      12670 (querylist x 100 + acquire-failure x 10 + queryjob x 1)
+- Efficient Score:      6351.37 (average + stdev)
+
+3 instances
+Jobs Scheduling Metrics:
+
+--(action count)----------------------------------------------
+- CREATE:             892
+- ACQUIRE_SUCCESS:    892
+- ACQUIRE_FAILURE:    853
+- COMPLETE:           892
+- QUERYJOB:           0
+- QUERYLIST:          60
+
+--(state count)----------------------------------------------
+- COUNT(CREATE):      0
+- COUNT(LOCK):        0
+- COUNT(COMPLETE):    892
+
+--(statistics)----------------------------------------------
+- DELAY(Average):     970
+- DELAY(Stdev):       1071.81037528063
+
+--(test result)----------------------------------------------
+- Complete Job:       True, 892 / 892
+- Delay Too Long:     0
+- Fail Job:           True, 0
+
+--(benchmark score)----------------------------------------------
+- Exec Cost Score:      14530 (querylist x 100 + acquire-failure x 10 + queryjob x 1)
+- Efficient Score:      2041.81 (average + stdev)
+
+
+4 instances
+Jobs Scheduling Metrics:
+
+--(action count)----------------------------------------------
+- CREATE:             886
+- ACQUIRE_SUCCESS:    886
+- ACQUIRE_FAILURE:    1052
+- COMPLETE:           886
+- QUERYJOB:           0
+- QUERYLIST:          65
+
+--(state count)----------------------------------------------
+- COUNT(CREATE):      0
+- COUNT(LOCK):        0
+- COUNT(COMPLETE):    886
+
+--(statistics)----------------------------------------------
+- DELAY(Average):     2113
+- DELAY(Stdev):       2523.11339337198
+
+--(test result)----------------------------------------------
+- Complete Job:       True, 886 / 886
+- Delay Too Long:     0
+- Fail Job:           True, 0
+
+--(benchmark score)----------------------------------------------
+- Exec Cost Score:      17020 (querylist x 100 + acquire-failure x 10 + queryjob x 1)
+- Efficient Score:      4636.11 (average + stdev)
+
+5 instances
+Jobs Scheduling Metrics:
+
+--(action count)----------------------------------------------
+- CREATE:             888
+- ACQUIRE_SUCCESS:    888
+- ACQUIRE_FAILURE:    887
+- COMPLETE:           888
+- QUERYJOB:           0
+- QUERYLIST:          79
+
+--(state count)----------------------------------------------
+- COUNT(CREATE):      0
+- COUNT(LOCK):        0
+- COUNT(COMPLETE):    888
+
+--(statistics)----------------------------------------------
+- DELAY(Average):     713
+- DELAY(Stdev):       750.695532844166
+
+--(test result)----------------------------------------------
+- Complete Job:       True, 888 / 888
+- Delay Too Long:     0
+- Fail Job:           True, 0
+
+--(benchmark score)----------------------------------------------
+- Exec Cost Score:      16770 (querylist x 100 + acquire-failure x 10 + queryjob x 1)
+- Efficient Score:      1463.7 (average + stdev)
+
+
+
+===10 min===
+Process finished with exit code 0.
+
+1 instances 10min
+Jobs Scheduling Metrics:
+
+--(action count)----------------------------------------------
+- CREATE:             1753
+- ACQUIRE_SUCCESS:    1753
+- ACQUIRE_FAILURE:    0
+- COMPLETE:           1753
+- QUERYJOB:           0
+- QUERYLIST:          35
+
+--(state count)----------------------------------------------
+- COUNT(CREATE):      0
+- COUNT(LOCK):        0
+- COUNT(COMPLETE):    1753
+
+--(statistics)----------------------------------------------
+- DELAY(Average):     4097
+- DELAY(Stdev):       3301.36603738793
+
+--(test result)----------------------------------------------
+- Complete Job:       True, 1753 / 1753
+- Delay Too Long:     0
+- Fail Job:           True, 0
+
+--(benchmark score)----------------------------------------------
+- Exec Cost Score:      3500 (querylist x 100 + acquire-failure x 10 + queryjob x 1)
+- Efficient Score:      7398.37 (average + stdev)
+
+2 instances 10min
+Jobs Scheduling Metrics:
+
+--(action count)----------------------------------------------
+- CREATE:             1743
+- ACQUIRE_SUCCESS:    1743
+- ACQUIRE_FAILURE:    282
+- COMPLETE:           1743
+- QUERYJOB:           0
+- QUERYLIST:          70
+
+--(state count)----------------------------------------------
+- COUNT(CREATE):      0
+- COUNT(LOCK):        0
+- COUNT(COMPLETE):    1743
+
+--(statistics)----------------------------------------------
+- DELAY(Average):     743
+- DELAY(Stdev):       689.386613712904
+
+--(test result)----------------------------------------------
+- Complete Job:       True, 1743 / 1743
+- Delay Too Long:     0
+- Fail Job:           True, 0
+
+--(benchmark score)----------------------------------------------
+- Exec Cost Score:      9820 (querylist x 100 + acquire-failure x 10 + queryjob x 1)
+- Efficient Score:      1432.39 (average + stdev)
+
+3 instances 10min
+Database initialization complete.
+- total jobs: 1738
+- now:   10/17/2019 11:42:32 PM
+- since: 10/17/2019 11:32:41 PM
+- until: 10/17/2019 11:42:41 PM
+
+Jobs Scheduling Metrics:
+
+--(action count)----------------------------------------------
+- CREATE:             1738
+- ACQUIRE_SUCCESS:    1738
+- ACQUIRE_FAILURE:    1205
+- COMPLETE:           1738
+- QUERYJOB:           0
+- QUERYLIST:          106
+
+--(state count)----------------------------------------------
+- COUNT(CREATE):      0
+- COUNT(LOCK):        0
+- COUNT(COMPLETE):    1738
+
+--(statistics)----------------------------------------------
+- DELAY(Average):     742
+- DELAY(Stdev):       925.22270754862
+
+--(test result)----------------------------------------------
+- Complete Job:       True, 1738 / 1738
+- Delay Too Long:     0
+- Fail Job:           True, 0
+
+--(benchmark score)----------------------------------------------
+- Exec Cost Score:      22650 (querylist x 100 + acquire-failure x 10 + queryjob x 1)
+- Efficient Score:      1667.22 (average + stdev)
+
+4 instances 10min
+Jobs Scheduling Metrics:
+
+--(action count)----------------------------------------------
+- CREATE:             1746
+- ACQUIRE_SUCCESS:    1746
+- ACQUIRE_FAILURE:    2090
+- COMPLETE:           1746
+- QUERYJOB:           0
+- QUERYLIST:          140
+
+--(state count)----------------------------------------------
+- COUNT(CREATE):      0
+- COUNT(LOCK):        0
+- COUNT(COMPLETE):    1746
+
+--(statistics)----------------------------------------------
+- DELAY(Average):     561
+- DELAY(Stdev):       586.758675790736
+
+--(test result)----------------------------------------------
+- Complete Job:       True, 1746 / 1746
+- Delay Too Long:     0
+- Fail Job:           True, 0
+
+--(benchmark score)----------------------------------------------
+- Exec Cost Score:      34900 (querylist x 100 + acquire-failure x 10 + queryjob x 1)
+- Efficient Score:      1147.76 (average + stdev)
+
+
+
+
+5min 
+2 instance 
+3 channel per instance
+Jobs Scheduling Metrics:
+
+--(action count)----------------------------------------------
+- CREATE:             891
+- ACQUIRE_SUCCESS:    891
+- ACQUIRE_FAILURE:    250
+- COMPLETE:           891
+- QUERYJOB:           0
+- QUERYLIST:          40
+
+--(state count)----------------------------------------------
+- COUNT(CREATE):      0
+- COUNT(LOCK):        0
+- COUNT(COMPLETE):    891
+
+--(statistics)----------------------------------------------
+- DELAY(Average):     1052
+- DELAY(Stdev):       1047.36634505427
+
+--(test result)----------------------------------------------
+- Complete Job:       True, 891 / 891
+- Delay Too Long:     0
+- Fail Job:           True, 0
+
+--(benchmark score)----------------------------------------------
+- Exec Cost Score:      6500 (querylist x 100 + acquire-failure x 10 + queryjob x 1)
+- Efficient Score:      2099.37 (average + stdev)
+
+
+
+5min 
+2 instance 
+5 channel per instance
+Jobs Scheduling Metrics:
+
+--(action count)----------------------------------------------
+- CREATE:             881
+- ACQUIRE_SUCCESS:    881
+- ACQUIRE_FAILURE:    253
+- COMPLETE:           881
+- QUERYJOB:           0
+- QUERYLIST:          40
+
+--(state count)----------------------------------------------
+- COUNT(CREATE):      0
+- COUNT(LOCK):        0
+- COUNT(COMPLETE):    881
+
+--(statistics)----------------------------------------------
+- DELAY(Average):     1648
+- DELAY(Stdev):       1845.33483915794
+
+--(test result)----------------------------------------------
+- Complete Job:       True, 881 / 881
+- Delay Too Long:     0
+- Fail Job:           True, 0
+
+--(benchmark score)----------------------------------------------
+- Exec Cost Score:      6530 (querylist x 100 + acquire-failure x 10 + queryjob x 1)
+- Efficient Score:      3493.33 (average + stdev)

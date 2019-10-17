@@ -11,10 +11,12 @@ namespace SubWorker.JulianDemo
 {
     internal class JulianSubWorkerBackgroundService : BackgroundService
     {
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        private const int maxChannelNumber = 5;
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var channels = new List<Channel<JobInfo>>();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < maxChannelNumber; i++)
             {
                 var ch = Channel.CreateBounded<JobInfo>(new BoundedChannelOptions(1)
                     {SingleWriter = true, SingleReader = true, AllowSynchronousContinuations = true});
@@ -30,12 +32,37 @@ namespace SubWorker.JulianDemo
             {
                 while (stoppingToken.IsCancellationRequested == false)
                 {
-                    var newJob = repo.GetReadyJobs(TimeSpan.FromSeconds(10)).ToList();
-                    
+                    var newJobs = repo.GetReadyJobs(TimeSpan.FromSeconds(10)).ToList();
+
+                    foreach (var job in newJobs)
+                    {
+                        var done = false;
+                        while (!done)
+                        {
+                            foreach (var channel in channels)
+                            {
+                                var writer = channel.Writer;
+                                if (writer.WaitToWriteAsync(stoppingToken).Result)
+                                {
+                                    writer.TryWrite(job);
+                                    done = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    try
+                    {
+                        await Task.Delay(JobSettings.MinPrepareTime, stoppingToken);
+                        Console.Write("_");
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        break;
+                    }
                 }
             }
-            
-            
         }
 
         private static async Task DoJob(ChannelReader<JobInfo> reader)
@@ -53,7 +80,7 @@ namespace SubWorker.JulianDemo
                             {
                                 await Task.Delay(job.RunAt.Subtract(now));
                             }
-                            
+
                             if (repo.AcquireJobLock(job.Id))
                             {
                                 repo.ProcessLockedJob(job.Id);
