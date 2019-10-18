@@ -28,7 +28,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SubWorkers", "SubWorkers", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubWorker.BorisDemo", "SubWorker.BorisDemo\SubWorker.BorisDemo.csproj", "{7D80EF21-E6C8-46EC-8179-67D328B15335}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubWorker.JulianDemo", "SubWorker.JulianDemo\SubWorker.JulianDemo.csproj", "{32F4B1E1-4A5B-4695-9BCD-1A76F8566420}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubWorker.JulianDemo", "SubWorker.JulianDemo\SubWorker.JulianDemo.csproj", "{32F4B1E1-4A5B-4695-9BCD-1A76F8566420}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubWorker.AndyDemo", "SubWorker.AndyDemo\SubWorker.AndyDemo.csproj", "{29711E67-24F9-4736-AAC8-BBE6831A4DEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,6 +74,10 @@ Global
 		{32F4B1E1-4A5B-4695-9BCD-1A76F8566420}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32F4B1E1-4A5B-4695-9BCD-1A76F8566420}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32F4B1E1-4A5B-4695-9BCD-1A76F8566420}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29711E67-24F9-4736-AAC8-BBE6831A4DEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29711E67-24F9-4736-AAC8-BBE6831A4DEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29711E67-24F9-4736-AAC8-BBE6831A4DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29711E67-24F9-4736-AAC8-BBE6831A4DEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +90,7 @@ Global
 		{8C3A5B74-31F1-476F-84DF-CE7E5446E8D9} = {5A225F28-B864-4306-B0C7-83D9CBDABF5B}
 		{7D80EF21-E6C8-46EC-8179-67D328B15335} = {5A225F28-B864-4306-B0C7-83D9CBDABF5B}
 		{32F4B1E1-4A5B-4695-9BCD-1A76F8566420} = {5A225F28-B864-4306-B0C7-83D9CBDABF5B}
+		{29711E67-24F9-4736-AAC8-BBE6831A4DEF} = {5A225F28-B864-4306-B0C7-83D9CBDABF5B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {43B102A2-F68E-4926-9EAA-6763FDDEF0B4}
