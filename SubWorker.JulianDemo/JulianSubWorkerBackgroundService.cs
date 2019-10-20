@@ -9,7 +9,7 @@ using SchedulingPractice.Core;
 
 namespace SubWorker.JulianDemo
 {
-    internal class JulianSubWorkerBackgroundService : BackgroundService
+    public class JulianSubWorkerBackgroundService : BackgroundService
     {
         private const int maxChannelNumber = 5;
 

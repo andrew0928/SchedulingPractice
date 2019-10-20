@@ -17,11 +17,10 @@ namespace SubWorker.AndrewDemo
             var host = new HostBuilder()
                 .ConfigureServices((context, services) =>
                 {
-                    services.AddHostedService<AndrewSubWorkerBackgroundService>();
-                    //services.AddHostedService<AndrewSubWorker2BackgroundService>();
+                    //services.AddHostedService<AndrewSubWorkerBackgroundService>();
+                    services.AddHostedService<AndrewSubWorkerBackgroundService2>();
                 })
                 .Build();
-
             using (host)
             {
                 host.Start();

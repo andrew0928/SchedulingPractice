@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HankDemo.HankTaskRunner\HankDemo.HankTaskRunner.csproj" />
+    <ProjectReference Include="..\SubWorker.AndrewDemo\SubWorker.AndrewDemo.csproj" />
+    <ProjectReference Include="..\SubWorker.AndyDemo\SubWorker.AndyDemo.csproj" />
+    <ProjectReference Include="..\SubWorker.BorisDemo\SubWorker.BorisDemo.csproj" />
+    <ProjectReference Include="..\SubWorker.JolinDemo\SubWorker.JolinDemo.csproj" />
+    <ProjectReference Include="..\SubWorker.JulianDemo\SubWorker.JulianDemo.csproj" />
+    <ProjectReference Include="..\SubWorker.JWDemo\SubWorker.JWDemo.csproj" />
+    <ProjectReference Include="..\SubWorker.LeviDemo\SubWorker.LeviDemo.csproj" />
+  </ItemGroup>
+
+</Project>

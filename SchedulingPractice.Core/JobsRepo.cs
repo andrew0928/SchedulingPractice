@@ -27,7 +27,7 @@ namespace SchedulingPractice.Core
 
             if (string.IsNullOrEmpty(connstr))
             {
-                this._conn = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=JobsDB;Integrated Security=True;Pooling=False");
+                this._conn = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=JobsDB;Integrated Security=True;");
             }
             else
             {
@@ -93,7 +93,7 @@ select @id;
         {
             return this._conn.Execute(
                 @"
-update [jobs] set state = 1 where id = @id and state = 0;
+update [jobs] set state = 1, lockat = getdate() where id = @id and state = 0 and lockat is NULL;
 insert [workerlogs] (jobid, action, clientid) values (@id, case @@rowcount when 1 then 'ACQUIRE_SUCCESS' else 'ACQUIRE_FAILURE' end, @clientid);
 ",
                 new

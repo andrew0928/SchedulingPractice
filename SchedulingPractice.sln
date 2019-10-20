@@ -12,6 +12,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{927CF37F-7C8C-426E-B63C-1121CA9FE062}"
 	ProjectSection(SolutionItems) = preProject
 		database.txt = database.txt
+		demo-all.cmd = demo-all.cmd
+		demo.cmd = demo.cmd
 		README.md = README.md
 		statistics.txt = statistics.txt
 	EndProjectSection
@@ -31,6 +33,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubWorker.JulianDemo", "SubWorker.JulianDemo\SubWorker.JulianDemo.csproj", "{32F4B1E1-4A5B-4695-9BCD-1A76F8566420}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubWorker.AndyDemo", "SubWorker.AndyDemo\SubWorker.AndyDemo.csproj", "{29711E67-24F9-4736-AAC8-BBE6831A4DEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulingPractice.SubWorkerRunner", "SchedulingPractice.SubWorkerRunner\SchedulingPractice.SubWorkerRunner.csproj", "{5D349423-56A0-4E03-A59F-7D1AF95B78E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,6 +82,10 @@ Global
 		{29711E67-24F9-4736-AAC8-BBE6831A4DEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29711E67-24F9-4736-AAC8-BBE6831A4DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29711E67-24F9-4736-AAC8-BBE6831A4DEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D349423-56A0-4E03-A59F-7D1AF95B78E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D349423-56A0-4E03-A59F-7D1AF95B78E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D349423-56A0-4E03-A59F-7D1AF95B78E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D349423-56A0-4E03-A59F-7D1AF95B78E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

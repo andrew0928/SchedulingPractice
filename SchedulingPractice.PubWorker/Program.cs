@@ -8,11 +8,19 @@ namespace SchedulingPractice.PubWorker
     {
         static void Main(string[] args)
         {
-            // 設定: 預定測試持續時間
-            TimeSpan duration = TimeSpan.FromMinutes(1);
+            if (args.Length != 2)
+            {
+                Console.WriteLine("Usage: PubWorker.exe [since] [duration]");
+            }
+
+            int since_sec = int.Parse(args[0]);
+            int duration_sec = int.Parse(args[1]);
 
             // 設定: 預定測試開始時間
-            DateTime since = DateTime.Now.AddSeconds(30);
+            DateTime since = DateTime.Now.AddSeconds(since_sec);
+
+            // 設定: 預定測試持續時間
+            TimeSpan duration = TimeSpan.FromSeconds(duration_sec);
 
 
 

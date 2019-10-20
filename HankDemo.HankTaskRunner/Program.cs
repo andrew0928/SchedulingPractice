@@ -26,91 +26,92 @@ namespace HankTestTwo
             }
         }
 
-        public class HankTestProgram : BackgroundService
+    }
+    public class HankTestProgram : BackgroundService
+    {
+        private static Dictionary<int, Queue<JobInfo>> jobList;
+
+        protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            private static Dictionary<int, Queue<JobInfo>> jobList;
+            ThreadPool.SetMaxThreads(5, 5);
+            ThreadPool.QueueUserWorkItem(Worker, 0);
+            ThreadPool.QueueUserWorkItem(Worker, 1);
+            ThreadPool.QueueUserWorkItem(Worker, 2);
+            ThreadPool.QueueUserWorkItem(Worker, 3);
+            ThreadPool.QueueUserWorkItem(Worker, 4);
 
-            protected async override Task ExecuteAsync(CancellationToken stoppingToken)
+            using (JobsRepo repo = new JobsRepo())
             {
-                ThreadPool.SetMaxThreads(5, 5);
-                ThreadPool.QueueUserWorkItem(Worker, 0);
-                ThreadPool.QueueUserWorkItem(Worker, 1);
-                ThreadPool.QueueUserWorkItem(Worker, 2);
-                ThreadPool.QueueUserWorkItem(Worker, 3);
-                ThreadPool.QueueUserWorkItem(Worker, 4);
-
-                using (JobsRepo repo = new JobsRepo())
+                while (stoppingToken.IsCancellationRequested == false)
                 {
-                    while (stoppingToken.IsCancellationRequested == false)
-                    {
-                        var newJob = repo.GetReadyJobs(TimeSpan.FromSeconds(15)).ToList();
-                        
-                        jobList = getCleanDictionary();
-                        
-                        for (int i = 0; i < newJob.Count; i++)
-                        {
-                            jobList[i % 5].Enqueue(newJob[i]);
-                        }
+                    var newJob = repo.GetReadyJobs(TimeSpan.FromSeconds(15)).ToList();
 
-                        try
-                        {
-                            await Task.Delay(5000, stoppingToken);
-                            Console.Write("_");
-                        }
-                        catch (TaskCanceledException)
-                        {
-                            break;
-                        }
+                    jobList = getCleanDictionary();
+
+                    for (int i = 0; i < newJob.Count; i++)
+                    {
+                        jobList[i % 5].Enqueue(newJob[i]);
+                    }
+
+                    try
+                    {
+                        await Task.Delay(5000, stoppingToken);
+                        Console.Write("_");
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        break;
                     }
                 }
-
-                shutdown:
-
-                Console.WriteLine($"- shutdown event detected, stop worker service...");
             }
 
-            private static void Worker(object obj)
-            {
-                var index = (int) obj;
-                JobInfo job;
-                while (true)
-                {
-                    if (jobList == null || jobList[index] == null || jobList[index].TryDequeue(out job) == false)
-                    {
-                        Thread.Sleep(20);
-                        continue;
-                    }
+        shutdown:
 
-                    if (job != null && job.RunAt <= DateTime.Now)
+            Console.WriteLine($"- shutdown event detected, stop worker service...");
+        }
+
+        private static void Worker(object obj)
+        {
+            var index = (int)obj;
+            JobInfo job;
+            while (true)
+            {
+                if (jobList == null || jobList[index] == null || jobList[index].TryDequeue(out job) == false)
+                {
+                    Thread.Sleep(20);
+                    continue;
+                }
+
+                if (job != null && job.RunAt <= DateTime.Now)
+                {
+                    try
                     {
-                        try
+                        using (var repo = new JobsRepo())
                         {
-                            using (var repo = new JobsRepo())
+                            job = repo.GetJob(job.Id);
+                            if (job.State == 0 && repo.AcquireJobLock(job.Id))
                             {
-                                job = repo.GetJob(job.Id);
-                                if (job.State == 0 && repo.AcquireJobLock(job.Id))
-                                {
-                                    repo.ProcessLockedJob(job.Id);
-                                    Console.Write("O");
-                                }
-                                else
-                                {
-                                    Console.Write("X");
-                                }
+                                repo.ProcessLockedJob(job.Id);
+                                Console.Write("O");
+                            }
+                            else
+                            {
+                                Console.Write("X");
                             }
                         }
-                        catch
-                        {
-                            Console.Write("E");
-                        }
+                    }
+                    catch
+                    {
+                        Console.Write("E");
                     }
                 }
             }
+        }
 
 
-            private static Dictionary<int, Queue<JobInfo>> getCleanDictionary()
-            {
-                return new Dictionary<int, Queue<JobInfo>>()
+        private static Dictionary<int, Queue<JobInfo>> getCleanDictionary()
+        {
+            return new Dictionary<int, Queue<JobInfo>>()
                 {
                     {0, new Queue<JobInfo>()},
                     {1, new Queue<JobInfo>()},
@@ -118,7 +119,6 @@ namespace HankTestTwo
                     {3, new Queue<JobInfo>()},
                     {4, new Queue<JobInfo>()},
                 };
-            }
         }
     }
 }

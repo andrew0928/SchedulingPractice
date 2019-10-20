@@ -15,7 +15,7 @@ using System.Threading.Tasks;
  */
 namespace SubWorker.JWDemo
 {
-    class JWSubWorkerBackgroundServiceV2 : BackgroundService
+    public class JWSubWorkerBackgroundServiceV2 : BackgroundService
     {
         private static int MAX_CONCURRENT_SIZE = 5;
 
