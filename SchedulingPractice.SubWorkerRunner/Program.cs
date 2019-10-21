@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchedulingPractice.SubWorkerRunner
 {
@@ -32,6 +33,7 @@ namespace SchedulingPractice.SubWorkerRunner
                 {
                     //services.AddHostedService<AndrewSubWorkerBackgroundService>();
                     //services.AddHostedService<AndrewSubWorkerBackgroundService2>();
+                    if (mode == "demo") services.AddHostedService<SubWorker.AndrewDemo.AndrewSubWorkerBackgroundService>();
                     if (mode == "andrew0928") services.AddHostedService<SubWorker.AndrewDemo.AndrewSubWorkerBackgroundService2>();
                     if (mode == "andy19900208") services.AddHostedService<SubWorker.AndyDemo.AndySubWorkerBackgroundService>();
                     if (mode == "julian-chu") services.AddHostedService<SubWorker.JulianDemo.JulianSubWorkerBackgroundService>();
@@ -76,9 +78,13 @@ namespace SchedulingPractice.SubWorkerRunner
                     Console.WriteLine($"-----------------------------------------------------------------");
 
                     Thread.Sleep(TimeSpan.FromSeconds(delay_start));
+
                     host.Start();
-                    Thread.Sleep(TimeSpan.FromSeconds(timeout));
-                    host.StopAsync().Wait();
+
+                    Task.Delay(TimeSpan.FromSeconds(timeout)).Wait();
+                    host.StopAsync(TimeSpan.FromSeconds(30)).Wait();
+                        
+                    Console.WriteLine("- system shutdown...");
                 }
                 while (timer.Elapsed.TotalSeconds < total_timeout);
             }

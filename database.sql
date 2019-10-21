@@ -2,6 +2,7 @@
     [Id]        INT      IDENTITY (1, 1) NOT NULL,
     [RunAt]     DATETIME NOT NULL,
     [CreateAt]  DATETIME DEFAULT (getdate()) NOT NULL,
+    [LockAt]    DATETIME NULL,
     [ExecuteAt] DATETIME NULL,
     [State]     INT      DEFAULT ((0)) NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)

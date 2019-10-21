@@ -155,6 +155,17 @@ insert [workerlogs] (jobid, action, clientid) values (@id, case @@rowcount when 
             return this._conn.ExecuteScalar<double>(@"select stdev(datediff(millisecond, RunAt, ExecuteAt)) as stdev_delay from jobs where state = 2;");
         }
 
+        private int JobLockBeforeRunAtCount()
+        {
+            return this._conn.ExecuteScalar<int>($"select count(*) from Jobs where RunAt > LockAt;");
+        }
+
+        private int JobExecBeforeRunAtCount()
+        {
+            return this._conn.ExecuteScalar<int>($"select count(*) from Jobs where RunAt > ExecuteAt;");
+        }
+
+
         public (
             int count_action_create,
             int count_action_acquire_success,
@@ -166,6 +177,8 @@ insert [workerlogs] (jobid, action, clientid) values (@id, case @@rowcount when 
             int count_state_create,
             int count_state_lock,
             int count_state_complete,
+            int count_state_early_lock,
+            int count_state_early_exec,
 
             int stat_delay_exceed_count,
             double stat_average_delay,
@@ -183,6 +196,8 @@ insert [workerlogs] (jobid, action, clientid) values (@id, case @@rowcount when 
                 this.CountJobState(JobStateEnum.CREATE),
                 this.CountJobState(JobStateEnum.LOCK),
                 this.CountJobState(JobStateEnum.COMPLETE),
+                this.JobLockBeforeRunAtCount(),
+                this.JobExecBeforeRunAtCount(),
 
                 this.JobExecuteDelayExceedCount(),
                 this.JobExecuteDelayAverage(),

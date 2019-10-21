@@ -1,5 +1,6 @@
 ﻿using SchedulingPractice.Core;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace SchedulingPractice.PubWorker
@@ -8,13 +9,17 @@ namespace SchedulingPractice.PubWorker
     {
         static void Main(string[] args)
         {
-            if (args.Length != 2)
+            if (args.Length != 5)
             {
-                Console.WriteLine("Usage: PubWorker.exe [since] [duration]");
+                Console.WriteLine("Usage: PubWorker.exe [since] [duration] [runner] [mode] [csv-path]");
             }
 
             int since_sec = int.Parse(args[0]);
             int duration_sec = int.Parse(args[1]);
+
+            string runner = args[2];
+            string mode = args[3];
+            string path = args[4];
 
             // 設定: 預定測試開始時間
             DateTime since = DateTime.Now.AddSeconds(since_sec);
@@ -187,6 +192,36 @@ namespace SchedulingPractice.PubWorker
                 Console.WriteLine("--(benchmark score)----------------------------------------------");
                 Console.WriteLine($"- Exec Cost Score:      {metrics.count_action_querylist * 100.0 + metrics.count_action_acquire_failure * 10.0 + metrics.count_action_queryjob * 1.0:#.##} (querylist x 100 + acquire-failure x 10 + queryjob x 1)");
                 Console.WriteLine($"- Efficient Score:      {metrics.stat_average_delay + metrics.stat_stdev_delay:#.##} (average + stdev)");
+
+                // RUNNER, MODE,
+                // CREATE, ACQUIRE_SUCCESS, ACQUIRE_FAILURE, COMPLETE, QUERYJOB, QUERYLIST,
+                // CREATE_COUNT, LOCK_COUNT, COMPLETE_COUNT,
+                // DELAY_AVERAGE, DELAY_STDEV,
+                // DELAY_EXCEED, EARLY_LOCK, EARLY_EXEC,
+                // EXEC_COST_SCORE, EFFICIENT_SCORE,
+
+                //string path = @"result-stat.csv";
+
+                if (File.Exists(path) == false)
+                {
+                    File.AppendAllText(
+                        path,
+                        @"RUNNER, MODE, " +
+                        @"CREATE, ACQUIRE_SUCCESS, ACQUIRE_FAILURE, COMPLETE, QUERYJOB, QUERYLIST, " +
+                        @"CREATE_COUNT, LOCK_COUNT, COMPLETE_COUNT, " +
+                        @"DELAY_AVERAGE, DELAY_STDEV, " +
+                        @"DELAY_EXCEED, EARLY_LOCK, EARLY_EXEC, " +
+                        "\n");
+                }
+
+                File.AppendAllText(
+                    path, 
+                    $"{Environment.GetEnvironmentVariable("RUNNER")}, {Environment.GetEnvironmentVariable("MODE")}," +
+                    $"{metrics.count_action_create}, {metrics.count_action_acquire_success}, {metrics.count_action_acquire_failure}, {metrics.count_action_complete}, {metrics.count_action_queryjob}, {metrics.count_action_querylist}, " +
+                    $"{metrics.count_state_create}, {metrics.count_state_lock}, {metrics.count_state_complete}, " +
+                    $"{metrics.stat_average_delay}, {metrics.stat_stdev_delay}, " +
+                    $"{metrics.stat_delay_exceed_count}, {metrics.count_state_early_lock}, {metrics.count_state_early_exec}, " +
+                    "\n");
             }
         }
     }
