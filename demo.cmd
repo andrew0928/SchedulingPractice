@@ -5,6 +5,8 @@ set RUNNER=%1
 set SINCE=30
 set DURATION=600
 set TOTAL_DURATION=660
+:: set DURATION=60
+:: set TOTAL_DURATION=120
 set STATISTIC_CSV=%CD%\logs\statistics.csv
 
 mkdir logs

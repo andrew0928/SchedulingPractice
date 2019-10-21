@@ -58,7 +58,13 @@ namespace SubWorker.AndrewDemo
                         this._queue.Add(job);
                         //Console.Write('F');
                     }
-                    try { await Task.Delay(JobSettings.MinPrepareTime - timer.Elapsed, stoppingToken); } catch { goto shutdown; }
+                    try { 
+                        await Task.Delay(
+                            (int)Math.Max((JobSettings.MinPrepareTime - timer.Elapsed).TotalMilliseconds, 0), 
+                            stoppingToken); 
+                    } catch { 
+                        goto shutdown;
+                    }
                     //Console.Write('Z');
                 }
 

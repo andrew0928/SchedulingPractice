@@ -34,21 +34,22 @@ namespace SchedulingPractice.SubWorkerRunner
                     //services.AddHostedService<AndrewSubWorkerBackgroundService>();
                     //services.AddHostedService<AndrewSubWorkerBackgroundService2>();
                     if (mode == "demo") services.AddHostedService<SubWorker.AndrewDemo.AndrewSubWorkerBackgroundService>();
-                    if (mode == "andrew0928") services.AddHostedService<SubWorker.AndrewDemo.AndrewSubWorkerBackgroundService2>();
-                    if (mode == "andy19900208") services.AddHostedService<SubWorker.AndyDemo.AndySubWorkerBackgroundService>();
-                    if (mode == "julian-chu") services.AddHostedService<SubWorker.JulianDemo.JulianSubWorkerBackgroundService>();
-                    if (mode == "borischin") services.AddHostedService<SubWorker.BorisDemo.BorisSubWorkerBackgroundService>();
-                    if (mode == "levichen") services.AddHostedService<SubWorker.LeviDemo.LeviSubWorkerBackgroundService>();
-                    if (mode == "jwchen-dev") services.AddHostedService<SubWorker.JWDemo.JWSubWorkerBackgroundServiceV2>();
-                    //if (mode == "toyo0103") services.AddHostedService<SubWorker.JolinDemo.JolinSubWorkerBackgroundService>();
-                    if (mode == "toyo0103")
+                    else if (mode == "andrew0928") services.AddHostedService<SubWorker.AndrewDemo.AndrewSubWorkerBackgroundService2>();
+                    else if (mode == "andy19900208") services.AddHostedService<SubWorker.AndyDemo.AndySubWorkerBackgroundService>();
+                    else if (mode == "julian-chu") services.AddHostedService<SubWorker.JulianDemo.JulianSubWorkerBackgroundService>();
+                    else if (mode == "borischin") services.AddHostedService<SubWorker.BorisDemo.BorisSubWorkerBackgroundService>();
+                    else if (mode == "levichen") services.AddHostedService<SubWorker.LeviDemo.LeviSubWorkerBackgroundService>();
+                    else if (mode == "jwchen-dev") services.AddHostedService<SubWorker.JWDemo.JWSubWorkerBackgroundServiceV2>();
+                    //else if (mode == "toyo0103") services.AddHostedService<SubWorker.JolinDemo.JolinSubWorkerBackgroundService>();
+                    else if (mode == "toyo0103")
                     {
                         services.AddSingleton<IHostedService, SubWorker.JolinDemo.JolinSubWorkerBackgroundService>(sp =>
                         {
                             return new SubWorker.JolinDemo.JolinSubWorkerBackgroundService(null);
                         });
                     }
-                    if (mode == "acetaxxxx") services.AddHostedService<HankTestTwo.HankTestProgram>();
+                    else if (mode == "acetaxxxx") services.AddHostedService<HankTestTwo.HankTestProgram>();
+                    else { throw new ArgumentOutOfRangeException($"Mode: {mode} not is not valid."); }
                 })
                 .Build();
 
@@ -77,13 +78,18 @@ namespace SchedulingPractice.SubWorkerRunner
                     Console.WriteLine($"- Round Timeout: {timeout} sec");
                     Console.WriteLine($"-----------------------------------------------------------------");
 
-                    Thread.Sleep(TimeSpan.FromSeconds(delay_start));
+                    try
+                    {
+                        Thread.Sleep(TimeSpan.FromSeconds(delay_start));
+                        host.Start();
+                        Task.Delay(TimeSpan.FromSeconds(timeout)).Wait();
+                        host.StopAsync(TimeSpan.FromSeconds(30)).Wait();
+                    }
+                    catch(Exception ex)
+                    {
+                        Console.WriteLine($"- Exception: {ex}");
+                    }
 
-                    host.Start();
-
-                    Task.Delay(TimeSpan.FromSeconds(timeout)).Wait();
-                    host.StopAsync(TimeSpan.FromSeconds(30)).Wait();
-                        
                     Console.WriteLine("- system shutdown...");
                 }
                 while (timer.Elapsed.TotalSeconds < total_timeout);
