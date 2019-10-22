@@ -87,7 +87,7 @@ powershell sleep 30
 
 
 
-goto end
+:: goto end
 
 
 

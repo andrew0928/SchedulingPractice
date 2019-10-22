@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -88,6 +89,7 @@ namespace SchedulingPractice.SubWorkerRunner
                     catch(Exception ex)
                     {
                         Console.WriteLine($"- Exception: {ex}");
+                        File.AppendAllText($"exception-{mode}-{min_timeout}-{max_timeout}-{total_timeout}-PID{Process.GetCurrentProcess().Id}.txt", ex.ToString());
                     }
 
                     Console.WriteLine("- system shutdown...");
