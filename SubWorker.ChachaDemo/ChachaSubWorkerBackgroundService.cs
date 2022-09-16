@@ -13,35 +13,26 @@ namespace SubWorker.ChachaDemo
         private const int ChannelCount = 5;
         private Channel<JobInfo>[] channels;
 
-        public ChachaSubWorkerBackgroundService()
-        {
+        public ChachaSubWorkerBackgroundService() {
             channels = new Channel<JobInfo>[ChannelCount];
-            for (var i = 0; i < ChannelCount; i++)
-            {
+            for (var i = 0; i < ChannelCount; i++) {
                 channels[i] = Channel.CreateUnbounded<JobInfo>();
             }
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            try
-            {
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
+            try {
                 var getJob = Task.Run(async () => { await GetJob(stoppingToken); }, stoppingToken);
-                Parallel.For(0, channels.Length, new ParallelOptions()
-                {
+                Parallel.For(0, channels.Length, new ParallelOptions() {
                     MaxDegreeOfParallelism = Environment.ProcessorCount,
                     CancellationToken = stoppingToken
-                }, async i =>
-                {
-                    try
-                    {
-                        await foreach (var item in channels[i].Reader.ReadAllAsync(stoppingToken))
-                        {
+                }, async i => {
+                    try {
+                        await foreach (var item in channels[i].Reader.ReadAllAsync(stoppingToken)) {
                             await ProcessJob(item, stoppingToken);
                         }
                     }
-                    catch
-                    {
+                    catch {
                         Console.WriteLine("shut down");
                     }
                 });
@@ -49,33 +40,30 @@ namespace SubWorker.ChachaDemo
                 await Task.WhenAny(getJob);
             }
 
-            catch
-            {
+            catch {
                 Console.WriteLine("shut down");
             }
         }
 
-        private async Task GetJob(CancellationToken cts)
-        {
+        private async Task GetJob(CancellationToken cts) {
             using var jobRepo = new JobsRepo();
-            while (!cts.IsCancellationRequested)
-            {
-                await Task.Delay(JobSettings.MinPrepareTime, cts);
-                var jobs = jobRepo.GetReadyJobs().ToList();
-                for (var i = 0; i < jobs.Count; i++)
-                {
+            while (!cts.IsCancellationRequested) {
+                var jobs = jobRepo.GetReadyJobs(JobSettings.MinPrepareTime).ToList();
+                for (var i = 0; i < jobs.Count; i++) {
                     var index = i % ChannelCount;
                     await channels[index].Writer.WriteAsync(jobs[i], cts);
                 }
+
+                await Task.Delay(JobSettings.MinPrepareTime, cts);
             }
         }
 
-        private async Task ProcessJob(JobInfo jobInfo, CancellationToken cts)
-        {
+        private async Task ProcessJob(JobInfo jobInfo, CancellationToken cts) {
             using var jobsRepo = new JobsRepo();
             var now = DateTime.Now;
             if (jobInfo.RunAt > now)
                 await Task.Delay(jobInfo.RunAt.Subtract(now), cts);
+            if (jobsRepo.GetJob(jobInfo.Id).State != 0) return;
             if (jobsRepo.AcquireJobLock(jobInfo.Id))
                 jobsRepo.ProcessLockedJob(jobInfo.Id);
         }
