@@ -24,12 +24,17 @@ namespace SubWorker.ChachaDemo
             await Task.Delay(1, stoppingToken);
             try {
                 var getJobs = Task.Run(async () => { await GetJobs(stoppingToken); }, stoppingToken);
-                Parallel.For(0, _channels.Length, new ParallelOptions() {
+                Parallel.For((long)0, _channels.Length, new ParallelOptions() {
                     MaxDegreeOfParallelism = Environment.ProcessorCount,
                     CancellationToken = stoppingToken
                 }, async i => {
-                    await foreach (var item in _channels[i].Reader.ReadAllAsync()) {
-                        await ProcessJob(i, item, stoppingToken);
+                    while (!stoppingToken.IsCancellationRequested) {
+                        try {
+                            var item = await _channels[i].Reader.ReadAsync(stoppingToken);
+                            await ProcessJob(item, stoppingToken);
+                        }
+                        catch { Console.WriteLine($"channel #{i} exit.");
+                        }
                     }
                 });
                 await Task.WhenAny(getJobs, Task.Delay(Timeout.Infinite, stoppingToken));
@@ -52,7 +57,7 @@ namespace SubWorker.ChachaDemo
             }
         }
 
-        private async Task ProcessJob(int channelIndex, JobInfo jobInfo, CancellationToken cts) {
+        private async Task ProcessJob(JobInfo jobInfo, CancellationToken cts) {
             using var jobsRepo = new JobsRepo();
             var now = DateTime.Now;
             if (jobInfo.RunAt > now)
@@ -60,12 +65,13 @@ namespace SubWorker.ChachaDemo
                     await Task.Delay(jobInfo.RunAt.Subtract(now), cts);
                 }
                 catch {
-                    Console.WriteLine($"Leave lock job. job id {jobInfo.Id}");
+                    Console.WriteLine($"X - Leave unlock job. job id {jobInfo.Id}");
                 }
 
             if (jobsRepo.GetJob(jobInfo.Id).State != 0) return;
             if (jobsRepo.AcquireJobLock(jobInfo.Id))
                 jobsRepo.ProcessLockedJob(jobInfo.Id);
+            Console.WriteLine("O");
         }
     }
 }
