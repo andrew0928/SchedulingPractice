@@ -21,26 +21,21 @@ namespace SubWorker.ChachaDemo
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken) {
-            await Task.Delay(1,stoppingToken);
+            await Task.Delay(1, stoppingToken);
             try {
-                Task.Run(async () => { await GetJobs(stoppingToken); }, stoppingToken);
+                var getJobs = Task.Run(async () => { await GetJobs(stoppingToken); }, stoppingToken);
                 Parallel.For(0, _channels.Length, new ParallelOptions() {
                     MaxDegreeOfParallelism = Environment.ProcessorCount,
                     CancellationToken = stoppingToken
                 }, async i => {
-                    try {
-                        await foreach (var item in _channels[i].Reader.ReadAllAsync(stoppingToken)) {
-                            await ProcessJob(i, item, stoppingToken);
-                        }
-                    }
-                    catch {
-                        Console.WriteLine("shut down");
+                    await foreach (var item in _channels[i].Reader.ReadAllAsync()) {
+                        await ProcessJob(i, item, stoppingToken);
                     }
                 });
+                await Task.WhenAny(getJobs, Task.Delay(Timeout.Infinite, stoppingToken));
             }
-
             catch {
-                Console.WriteLine("shut down");
+                Console.WriteLine("Application shut down.");
             }
         }
 
@@ -59,27 +54,18 @@ namespace SubWorker.ChachaDemo
 
         private async Task ProcessJob(int channelIndex, JobInfo jobInfo, CancellationToken cts) {
             using var jobsRepo = new JobsRepo();
-            if (jobsRepo.GetJob(jobInfo.Id).State != 0) return;
-            if (jobsRepo.AcquireJobLock(jobInfo.Id) == false) return;
             var now = DateTime.Now;
-            if (jobInfo.RunAt > now) {
+            if (jobInfo.RunAt > now)
                 try {
-                    Console.WriteLine($"Chanel index is {channelIndex}, job id is {jobInfo.Id}");
                     await Task.Delay(jobInfo.RunAt.Subtract(now), cts);
                 }
-                catch (Exception e) {
-                    Console.WriteLine(
-                        $"Application shout down, early process job, job id is {jobInfo.Id} {e.ToString()}");
-                    jobsRepo.ProcessLockedJob(jobInfo.Id);
-                    // goto shoutDown(e);
+                catch {
+                    Console.WriteLine($"Leave lock job. job id {jobInfo.Id}");
                 }
-            }
-            else {
-                Console.WriteLine($"Delay {jobInfo.Id}");
-                jobsRepo.ProcessLockedJob(jobInfo.Id);
-            }
 
-            jobsRepo.ProcessLockedJob(jobInfo.Id);
+            if (jobsRepo.GetJob(jobInfo.Id).State != 0) return;
+            if (jobsRepo.AcquireJobLock(jobInfo.Id))
+                jobsRepo.ProcessLockedJob(jobInfo.Id);
         }
     }
 }
