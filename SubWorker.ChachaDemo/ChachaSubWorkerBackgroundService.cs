@@ -33,7 +33,8 @@ namespace SubWorker.ChachaDemo
                             var item = await _channels[i].Reader.ReadAsync(stoppingToken);
                             await ProcessJob(item, stoppingToken);
                         }
-                        catch { Console.WriteLine($"channel #{i} exit.");
+                        catch {
+                            Console.WriteLine($"channel #{i} exit.");
                         }
                     }
                 });
