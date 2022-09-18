@@ -14,6 +14,7 @@
     <ProjectReference Include="..\SubWorker.AndrewDemo\SubWorker.AndrewDemo.csproj" />
     <ProjectReference Include="..\SubWorker.AndyDemo\SubWorker.AndyDemo.csproj" />
     <ProjectReference Include="..\SubWorker.BorisDemo\SubWorker.BorisDemo.csproj" />
+    <ProjectReference Include="..\SubWorker.JimDemo\SubWorker.JimDemo.csproj" />
     <ProjectReference Include="..\SubWorker.JolinDemo\SubWorker.JolinDemo.csproj" />
     <ProjectReference Include="..\SubWorker.JulianDemo\SubWorker.JulianDemo.csproj" />
     <ProjectReference Include="..\SubWorker.JWDemo\SubWorker.JWDemo.csproj" />
