@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29215.179
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulingPractice.Core", "SchedulingPractice.Core\SchedulingPractice.Core.csproj", "{4E411DD0-16E8-4BD9-BA79-D22D1F4FE9B1}"
 EndProject
@@ -11,10 +11,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubWorker.AndrewDemo", "Sub
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{927CF37F-7C8C-426E-B63C-1121CA9FE062}"
 	ProjectSection(SolutionItems) = preProject
+		andrew0928demoworker.cmd = andrew0928demoworker.cmd
+		andydemoworker.cmd = andydemoworker.cmd
 		database.sql = database.sql
 		demo-all.cmd = demo-all.cmd
 		demo.cmd = demo.cmd
+		init.cmd = init.cmd
 		README.md = README.md
+		jimdemoall.cmd = jimdemoall.cmd
+		jimdemoha.cmd = jimdemoha.cmd
+		jimdemoworker.cmd = jimdemoworker.cmd
 		statistics.sql = statistics.sql
 	EndProjectSection
 EndProject
@@ -35,6 +41,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubWorker.AndyDemo", "SubWorker.AndyDemo\SubWorker.AndyDemo.csproj", "{29711E67-24F9-4736-AAC8-BBE6831A4DEF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulingPractice.SubWorkerRunner", "SchedulingPractice.SubWorkerRunner\SchedulingPractice.SubWorkerRunner.csproj", "{5D349423-56A0-4E03-A59F-7D1AF95B78E7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubWorker.JimDemo", "SubWorker.JimDemo\SubWorker.JimDemo.csproj", "{8CCFCDE5-71A0-4935-8B69-9CAB71931065}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,6 +94,10 @@ Global
 		{5D349423-56A0-4E03-A59F-7D1AF95B78E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D349423-56A0-4E03-A59F-7D1AF95B78E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D349423-56A0-4E03-A59F-7D1AF95B78E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CCFCDE5-71A0-4935-8B69-9CAB71931065}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CCFCDE5-71A0-4935-8B69-9CAB71931065}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CCFCDE5-71A0-4935-8B69-9CAB71931065}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CCFCDE5-71A0-4935-8B69-9CAB71931065}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +111,7 @@ Global
 		{7D80EF21-E6C8-46EC-8179-67D328B15335} = {5A225F28-B864-4306-B0C7-83D9CBDABF5B}
 		{32F4B1E1-4A5B-4695-9BCD-1A76F8566420} = {5A225F28-B864-4306-B0C7-83D9CBDABF5B}
 		{29711E67-24F9-4736-AAC8-BBE6831A4DEF} = {5A225F28-B864-4306-B0C7-83D9CBDABF5B}
+		{8CCFCDE5-71A0-4935-8B69-9CAB71931065} = {5A225F28-B864-4306-B0C7-83D9CBDABF5B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {43B102A2-F68E-4926-9EAA-6763FDDEF0B4}
