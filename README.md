@@ -1,76 +1,76 @@
-# �Ƶ{�B�z���m��
+# 排程處理的練習
 
 
 
-# �ؼ�:
+# 目標:
 
-�Ҧ��Ƶ{���ɶ��w�Ƭ����A����b jobs �o table �� (schema �аѦҤU�軡��)�C�o�m�ߪ��D�n�ؼЬO�A�b jobs database �u�䴩�Q�ʬd�ߪ�����U�A
-�г]�p worker �������ȡC
+所有排程的時間安排紀錄，都放在 jobs 這 table 內 (schema 請參考下方說明)。這練習的主要目標是，在 jobs database 只支援被動查詢的限制下，
+請設計 worker 完成任務。
 
-���Ȫ��ݨD (��������������):
+任務的需求 (必須全部都滿足):
 
-1. �Ҧ� job �������b���w�ɶ��d�򤺳Q�Ұ� (�w���ɶ� + �i����������d��)
-1. �C�� job ���u��Q����@��, ���঳�B�z��@�b���������p
-1. �����䴩���������� (�h�� worker, ������t��, �ब�۳ƴ�, �䴩�ʺA scaling)
+1. 所有 job 都必須在指定時間範圍內被啟動 (預約時間 + 可接受的延遲範圍)
+1. 每個 job 都只能被執行一次, 不能有處理到一半掛掉的狀況
+1. 必須支援分散式執行 (多組 worker, 能分散負載, 能互相備援, 支援動態 scaling)
 
-���_�B�z����~����� (�����u������):
+評斷處理機制的品質指標 (按照優先順序):
 
-1. ���������Ҧ��W�z���ȻݨD
-1. Jobs �M��d�ߪ����ƶV�ֶV�n
-1. Jobs ���հ��楢�� (�m����lock) �����ƶV�ֶV�n
-1. Jobs ���𪺮ɶ��V�u�V�n (����: ��ڱҰʮɶ� - �w���Ұʮɶ�)
-  * ���𥭧���, �V�p�V�n
-  * ����зǮt, �V�p�V�n
-1. �ӧO job ���A�d�ߪ����� (���w job id) �V�ֶV�n
+1. 必須滿足所有上述任務需求
+1. Jobs 清單查詢的次數越少越好
+1. Jobs 嘗試執行失敗 (搶不到lock) 的次數越少越好
+1. Jobs 延遲的時間越短越好 (延遲: 實際啟動時間 - 預約啟動時間)
+  * 延遲平均值, 越小越好
+  * 延遲標準差, 越小越好
+1. 個別 job 狀態查詢的次數 (指定 job id) 越少越好
 
-�̲׵��� = Sum(���� x �v��):
-1. ���榨��, �V�C�V�n:
+最終評分 = Sum(指標 x 權重):
+1. 執行成本, 越低越好:
 ```querylist x 100.0 + acquire_failure x 10.0 + queryjob x 1.0```
-1. ����{��, �V�C�V�n:
+1. 延遲程度, 越低越好:
 ```average + stdev```
 
 
-# ���ҷǳ�
+# 環境準備
 
-���楻�d�ҵ{���A�ݭn�B�~�ǳ� SQL database. �ڦۤv�ϥ� LocalDB, �i�H���`�B��C
+執行本範例程式，需要額外準備 SQL database. 我自己使用 LocalDB, 可以正常運行。
 
-1. �Х��إ� database: ```JobsDB```
-2. �Х� sql script: [database.txt](database.txt) �إ� table (�u����Ӫ���: jobs / workerlogs)
-3. �Y���S�O���w�A�{���X�w�]�|�ϥγo�s���r��: ```Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=JobsDB;Integrated Security=True;Pooling=False```
-
-
-# ���D�W�d
-
-�S�����󭭨�, �A�u�n�Ѧ� project: ```SchedulingPractice.Core``` �M��, �åB���� ```JobsRepo``` ���O, �Q��k�g�X�����ݨD���{���Y�i�C
-
-# ���Ҥ覡
-
-���m���D���Ѩ�� project:
-
-1. SchedulingPractice.Core, class library, ���ѥ��n����ܮw (�D�n�O JobsRepo)
-1. SchedulingPRactice.PubWorker, console app, �إߴ��ո�ơA�P��ܲέp��T�� console app
-
-�ХΤU�C�覡���էA���{���O�_�ŦX�n�D�C
-
-## ���ҥi�a�� (HA)
-
-1. ���ӻ����ǳ����� (�u�ݭn���@��)
-1. �Ұ� SchedulingPRactice.PubWorker, �w�]�|���� 10 min, �C������|�M����Ʈw���e, �Э@�ߵ���
-1. �ЦP�ɱҰ� 5 ���A���{��
-1. ����Ұ� 1 min ����A���H�����U CTRL-C ���N���_�A���{��
-1. ���� SchedulingPRactice.PubWorker ���槹���A��ܲέp���G�C�T�{ "test result" �ƭ�:
-  1. ```Complete Job``` �O�_�� 100% ? 
-  1. ```Delay Too Long``` �O�_�� 0 ?
-  1. ```Fail Job``` �O�_�� 0 ?
+1. 請先建立 database: ```JobsDB```
+2. 請用 sql script: [database.sql](database.sql) 建立 table (只有兩個表格: jobs / workerlogs)
+3. 若未特別指定，程式碼預設會使用這連接字串: ```Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=JobsDB;Integrated Security=True;Pooling=False```
 
 
-## ���ҮĲv
+# 解題規範
 
-1. ���ӻ����ǳ����� (�u�ݭn���@��)
-1. �Ұ� SchedulingPRactice.PubWorker, �w�]�|���� 10 min, �C������|�M����Ʈw���e, �Э@�ߵ���
-1. �ЦP�ɱҰ� 5 ���A���{��
-1. ���� SchedulingPRactice.PubWorker ���槹���A��ܲέp���G�C���� cost / efficient score. ��̪����ƶV�C�V�n�C
+沒有任何限制, 你只要參考 project: ```SchedulingPractice.Core``` 專案, 並且善用 ```JobsRepo``` 類別, 想辦法寫出滿足需求的程式即可。
 
-## ��X�̨βզX
+# 驗證方式
 
-���ӤW�z "���ҮĲv" ���{�ǡA���ܦP�ɱҰʵ{�����M�� (�w�] 5), ��X score �ƭȳ̧C���պA, �s�P PR �ɤ@�_���W�C
+本練習題提供兩個 project:
+
+1. SchedulingPractice.Core, class library, 提供必要的函示庫 (主要是 JobsRepo)
+1. SchedulingPRactice.PubWorker, console app, 建立測試資料，與顯示統計資訊的 console app
+
+請用下列方式測試你的程式是否符合要求。
+
+## 驗證可靠度 (HA)
+
+1. 按照說明準備環境 (只需要做一次)
+1. 啟動 SchedulingPRactice.PubWorker, 預設會執行 10 min, 每次執行會清除資料庫內容, 請耐心等候
+1. 請同時啟動 5 份你的程式
+1. 執行啟動 1 min 之後，請隨機按下 CTRL-C 任意中斷你的程式
+1. 等待 SchedulingPRactice.PubWorker 執行完畢，顯示統計結果。確認 "test result" 數值:
+  1. ```Complete Job``` 是否為 100% ? 
+  1. ```Delay Too Long``` 是否為 0 ?
+  1. ```Fail Job``` 是否為 0 ?
+
+
+## 驗證效率
+
+1. 按照說明準備環境 (只需要做一次)
+1. 啟動 SchedulingPRactice.PubWorker, 預設會執行 10 min, 每次執行會清除資料庫內容, 請耐心等候
+1. 請同時啟動 5 份你的程式
+1. 等待 SchedulingPRactice.PubWorker 執行完畢，顯示統計結果。紀錄 cost / efficient score. 兩者的分數越低越好。
+
+## 找出最佳組合
+
+按照上述 "驗證效率" 的程序，改變同時啟動程式的套數 (預設 5), 找出 score 數值最低的組態, 連同 PR 時一起附上。
