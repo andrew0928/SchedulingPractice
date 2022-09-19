@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using SchedulingPractice.Core;
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,91 +14,68 @@ namespace SubWorker.JimDemo
 {
     public class JimSubWorkerBackgroundService : BackgroundService
     {
-        private readonly BlockingCollection<JobInfo> _queue = new BlockingCollection<JobInfo>();
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        private BlockingCollection<JobInfo> _queue = new BlockingCollection<JobInfo>();
+        protected async override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             await Task.Delay(1);
-            //平行處理
-            Thread[] threads = new Thread[5];
-            for (int i = 0; i < threads.Length; i++)
+            List<Task> tasks = new List<Task>();
+            for (int i = 0; i < 5; i++)
             {
-                threads[i] = new Thread(Worker);
-                threads[i].Start();
+                Task task = Task.Run(() => Worker());
+                tasks.Add(task);
             }
-
 
             Stopwatch timer = new Stopwatch();
 
             using (JobsRepo repo = new JobsRepo())
             {
-                if (!stoppingToken.IsCancellationRequested)
+                while (stoppingToken.IsCancellationRequested == false)
                 {
                     timer.Restart();
-                    var allReadyJobs = repo.GetReadyJobs();
-                    if (allReadyJobs != null)
+                    Console.WriteLine($"[T: {Thread.CurrentThread.ManagedThreadId}] fetch available jobs from repository...");
+
+                    foreach (var job in repo.GetReadyJobs(JobSettings.MinPrepareTime))
                     {
-                        foreach (var allReadyJob in allReadyJobs)
+                        if (stoppingToken.IsCancellationRequested == false)
                         {
-                            if (!stoppingToken.IsCancellationRequested)
+                            if (repo.GetJob(job.Id).State == 0)
                             {
-                                //降低Lock次數
-                                if (repo.GetJob(allReadyJob.Id).State != 0)
+                                if (repo.AcquireJobLock(job.Id))
                                 {
-                                    Console.Write("%");
-                                    continue;
+                                    if (job.RunAt > DateTime.Now)
+                                    {
+                                        await Task.Delay(job.RunAt - DateTime.Now);
+                                    }
+                                    _queue.Add(job);
                                 }
-                                //鎖定
-                                if (!repo.AcquireJobLock(allReadyJob.Id))
-                                {
-                                    Console.Write("X");
-                                    continue;
-                                }
-                                _queue.Add(allReadyJob);
-                            }
-                            else
-                            {
-                                goto shutdown;
                             }
                         }
-
-                        try
+                    }
+                    
+                    if (stoppingToken.IsCancellationRequested == false)
+                    {
+                        if(JobSettings.MinPrepareTime > timer.Elapsed)
                         {
                             await Task.Delay((int)Math.Max((JobSettings.MinPrepareTime - timer.Elapsed).TotalMilliseconds, 0), stoppingToken);
                         }
-                        catch (TaskCanceledException)
-                        {
-                            goto shutdown;
-                        }
                     }
                 }
-            shutdown:
                 _queue.CompleteAdding();
+                Task.WaitAll(tasks.ToArray());
             }
-            foreach (var thead in threads)
-            {
-                thead.Join();
-            }
-            Console.WriteLine($"- shutdown event detected, stop worker service...");
+            Console.WriteLine($"[T: {Thread.CurrentThread.ManagedThreadId}] shutdown background services...");
         }
-        private async void Worker()
+        private void Worker()
         {
             using (JobsRepo repo = new JobsRepo())
             {
-                foreach (JobInfo job in this._queue.GetConsumingEnumerable())
+                foreach (var job in this._queue.GetConsumingEnumerable())
                 {
-                    //判斷Lock之後，是否可立即執行
-                    if (job.RunAt > DateTime.Now)
-                    {
-                        Console.Write("@");
-                        await Task.Delay(job.RunAt - DateTime.Now);
-                        continue;
-                    }
                     repo.ProcessLockedJob(job.Id);
-                    Console.Write("O");
+                    Console.WriteLine($"[T: {Thread.CurrentThread.ManagedThreadId}] process job({job.Id}) with delay {(DateTime.Now - job.RunAt).TotalMilliseconds} msec...");
                 }
+                Console.WriteLine($"[T: {Thread.CurrentThread.ManagedThreadId}] process worker thread was terminated...");
             }
-
-
         }
     }
 }

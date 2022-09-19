@@ -11,13 +11,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubWorker.AndrewDemo", "Sub
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{927CF37F-7C8C-426E-B63C-1121CA9FE062}"
 	ProjectSection(SolutionItems) = preProject
+		andrew0928demoworker.cmd = andrew0928demoworker.cmd
+		andydemoworker.cmd = andydemoworker.cmd
 		database.sql = database.sql
 		demo-all.cmd = demo-all.cmd
 		demo.cmd = demo.cmd
 		init.cmd = init.cmd
-		jimdemo.cmd = jimdemo.cmd
-		jimdemowork1.cmd = jimdemowork1.cmd
 		README.md = README.md
+		jimdemoall.cmd = jimdemoall.cmd
+		jimdemoha.cmd = jimdemoha.cmd
+		jimdemoworker.cmd = jimdemoworker.cmd
 		statistics.sql = statistics.sql
 	EndProjectSection
 EndProject
@@ -39,7 +42,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubWorker.AndyDemo", "SubWo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchedulingPractice.SubWorkerRunner", "SchedulingPractice.SubWorkerRunner\SchedulingPractice.SubWorkerRunner.csproj", "{5D349423-56A0-4E03-A59F-7D1AF95B78E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SubWorker.JimDemo", "SubWorker.JimDemo\SubWorker.JimDemo.csproj", "{8CCFCDE5-71A0-4935-8B69-9CAB71931065}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubWorker.JimDemo", "SubWorker.JimDemo\SubWorker.JimDemo.csproj", "{8CCFCDE5-71A0-4935-8B69-9CAB71931065}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
