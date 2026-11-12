@@ -51,6 +51,7 @@ namespace SchedulingPractice.SubWorkerRunner
                     }
                     else if (mode == "acetaxxxx") services.AddHostedService<HankTestTwo.HankTestProgram>();
                     else if (mode == "jackie82422") services.AddHostedService<SubWorker.ChachaDemo.ChachaSubWorkerBackgroundService>();
+                    else if (mode == "jim") services.AddHostedService<SubWorker.JimDemo.JimSubWorkerBackgroundService>();
                     else { throw new ArgumentOutOfRangeException($"Mode: {mode} not is not valid."); }
                   
                 })
